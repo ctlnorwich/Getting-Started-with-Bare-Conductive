@@ -48,7 +48,7 @@ git clone https://github.com/BareConductive/mpr121.git
 
 ## Step 3: Run the HID Keyboard Example
 
-This example turns your Touch Board into a USB keyboard, allowing you to trigger native keystrokes on your computer by touching the physical electrodes.
+This example turns your Touch Board into a USB keyboard, allowing you to trigger native keystrokes on your computer by touching the electrode pads on edge of the board.
 
 1. Get the HID Keyboard project to your local machine:
    * **Via Git:** Run `git clone https://github.com/BareConductive/hid-keyboard.git` in your preferred project directory.
@@ -84,4 +84,4 @@ int touch_threshold = 40;
 int release_threshold = 20;
 ```
 
-Once uploaded, touching the twelve electrodes on the board will send the corresponding mapped keystrokes directly to your computer.
+Once uploaded, touching the twelve electrode pads on the edge of the board will send the corresponding mapped keystrokes directly to your computer.
