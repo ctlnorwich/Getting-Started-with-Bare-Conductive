@@ -1,4 +1,4 @@
-# Getting-Started-with-Bare-Conductive
+# Getting Started with Bare Conductive
 A brief tutorial in getting up and running with the now sunsetted Bare Conductive capacitance touch development boards.
 
 Since Bare Conductive has closed its doors, the official Arduino Boards Manager URLs and automated installers may no longer function. However, thanks to the open-source nature of their tools, you can still easily set up and program your Touch Board using manual installation methods directly from their GitHub archives.
