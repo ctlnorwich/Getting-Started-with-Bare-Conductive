@@ -1,0 +1,9 @@
+[submodule "bare-conductive-arduino"]
+	path = bare-conductive-arduino
+	url = https://github.com/BareConductive/bare-conductive-arduino.git
+[submodule "mpr121"]
+	path = mpr121
+	url = https://github.com/BareConductive/mpr121.git
+[submodule "hid-keyboard"]
+	path = hid-keyboard
+	url = https://github.com/BareConductive/hid-keyboard.git
