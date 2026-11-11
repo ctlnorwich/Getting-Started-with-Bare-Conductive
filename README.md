@@ -1,62 +1,60 @@
 # Getting Started with Bare Conductive
 A brief tutorial in getting up and running with the now sunsetted Bare Conductive capacitance touch development boards.
 
-Since Bare Conductive has closed its doors, the official Arduino Boards Manager URLs and automated installers may no longer function. However, thanks to the open-source nature of their tools, you can still easily set up and program your Touch Board using manual installation methods directly from their GitHub archives.
+Since Bare Conductive has closed its doors, this guide uses the archived board definitions and libraries included as Git submodules in this repository.
 
-This guide will walk you through setting up the hardware definitions, installing the required MPR121 library, and running the HID Keyboard example.
+This guide uses Arduino CLI to compile and upload the HID Keyboard example. The board definitions stay in this repository instead of being copied into your normal Arduino Sketchbook.
 
 ## Prerequisites
-* Arduino IDE installed (v1.8.x or v2.x)
+* [Arduino CLI](https://arduino.github.io/arduino-cli/latest/installation/) installed
 * Bare Conductive Touch Board
 * Micro USB cable
-* Git (optional, if using command-line installation methods)
+* Git
 
-## Step 1: Install the Hardware Definitions
+## Step 1: Get the repository
 
-Because the official package index is offline, we must install the board definitions manually. Locate your Arduino Sketchbook folder (found in the Arduino IDE under **File > Preferences** next to "Sketchbook location", commonly `Documents/Arduino`). Inside the Sketchbook folder, look for a folder named `hardware` (create it if it doesn't exist).
-
-**Option A: Git Clone (Recommended)**
-Open your terminal or command prompt, navigate to your Sketchbook's `hardware` folder, and run the following commands:
+Clone this repository and its submodules:
 ```bash
-mkdir -p bareconductive
-cd bareconductive
-git clone https://github.com/BareConductive/bare-conductive-arduino.git avr
+git clone --recurse-submodules https://github.com/ctlnorwich/Getting-Started-with-Bare-Conductive.git
+cd Getting-Started-with-Bare-Conductive
 ```
-*Note: The Arduino IDE expects the architecture folder, so cloning directly into a directory named `avr` ensures the path correctly ends up as `hardware/bareconductive/avr/boards.txt`.*
+If you already cloned without submodules, run `git submodule update --init --recursive` from the repository directory. The board platform is in `hardware/bareconductive/avr`.
 
-**Option B: ZIP Download**
-1. Download the repository: [Bare Conductive Arduino Core](https://github.com/BareConductive/bare-conductive-arduino) (Click the green **Code** button and select **Download ZIP**).
-2. Inside your `hardware` folder, create a new folder named `bareconductive`.
-3. Extract the downloaded ZIP into this folder and rename the extracted folder from `bare-conductive-arduino-master` to `avr`.
+## Step 2: Configure Arduino CLI and install the AVR core
 
-Restart the Arduino IDE. You should now see **Bare Conductive Touch Board** listed under **Tools > Board**.
+Point Arduino CLI's user directory at this repository so it discovers the local board platform without adding it to your usual Sketchbook. The checkout acts as the CLI user directory for that terminal session; Arduino's downloaded cores and tools remain in their normal data directory. Run this in the repository root in each terminal session.
 
-## Step 2: Install the MPR121 Library
-
-The Touch Board relies on the MPR121 chip for capacitive sensing. 
-
-**Option A: Git Clone**
-Open your terminal, navigate to your Sketchbook's `libraries` folder, and clone the main branch:
+macOS / Linux:
 ```bash
-git clone https://github.com/BareConductive/mpr121.git
+export ARDUINO_DIRECTORIES_USER="$PWD"
 ```
 
-**Option B: ZIP Download**
-1. Download the library: [MPR121 Library](https://github.com/BareConductive/mpr121) (Click **Code > Download ZIP**).
-2. In the Arduino IDE, go to **Sketch > Include Library > Add .ZIP Library...**
-3. Select the downloaded ZIP file. The IDE will automatically unpack and install it.
+Windows PowerShell:
+```powershell
+$env:ARDUINO_DIRECTORIES_USER = (Get-Location).Path
+```
 
-## Step 3: Run the HID Keyboard Example
+Install Arduino's AVR platform, which supplies the compiler and core used by the Touch Board definitions:
+```bash
+arduino-cli core update-index
+arduino-cli core install arduino:avr
+```
 
-This example turns your Touch Board into a USB keyboard, allowing you to trigger native keystrokes on your computer by touching the electrode pads on edge of the board.
+## Step 3: Compile and upload the HID Keyboard example
 
-1. Get the HID Keyboard project to your local machine:
-   * **Via Git:** Run `git clone https://github.com/BareConductive/hid-keyboard.git` in your preferred project directory.
-   * **Via ZIP:** Download from the [HID Keyboard GitHub Page](https://github.com/BareConductive/hid-keyboard) and extract the folder.
-2. Open the `.ino` sketch file in the Arduino IDE.
-3. Go to **Tools > Board** and select **Bare Conductive Touch Board**.
-4. Go to **Tools > Port** and select the USB port your board is connected to.
-5. Click the **Upload** button (the right-pointing arrow at the top left).
+The MPR121 library's Arduino library root is the inner `MPR121` directory, not the parent `mpr121` repository. Pass that directory to Arduino CLI; this does not copy or install the library into a Sketchbook.
+
+List connected ports and note the Touch Board's port:
+```bash
+arduino-cli board list
+```
+
+Compile and upload (replace `PORT` with the port shown above, such as `/dev/cu.usbmodem...` on macOS, `/dev/ttyACM0` on Linux, or `COM3` on Windows):
+```bash
+arduino-cli compile --upload --port PORT --fqbn bareconductive:avr:baretouch --library "$PWD/mpr121/MPR121" hid-keyboard/HID_Keyboard
+```
+
+The compile command works in PowerShell too; `$PWD` expands to the current repository directory.
 
 ### Customizing Keystrokes
 

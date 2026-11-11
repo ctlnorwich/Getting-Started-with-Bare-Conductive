@@ -1,5 +1,5 @@
 [submodule "bare-conductive-arduino"]
-	path = bare-conductive-arduino
+	path = hardware/bareconductive
 	url = https://github.com/BareConductive/bare-conductive-arduino.git
 [submodule "mpr121"]
 	path = mpr121
