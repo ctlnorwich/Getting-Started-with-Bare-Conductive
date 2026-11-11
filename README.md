@@ -40,6 +40,12 @@ arduino-cli core update-index
 arduino-cli core install arduino:avr
 ```
 
+Install Arduino's Keyboard library for the example:
+```bash
+arduino-cli lib install Keyboard
+```
+Because the CLI user directory is set to this checkout, the library is installed in its `libraries` directory, not your usual Sketchbook. Run the user-directory command above before installing it and whenever compiling.
+
 ## Step 3: Compile and upload the HID Keyboard example
 
 The MPR121 library's Arduino library root is the inner `MPR121` directory, not the parent `mpr121` repository. Pass that directory to Arduino CLI; this does not copy or install the library into a Sketchbook.
